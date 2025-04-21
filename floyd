@@ -1,0 +1,88 @@
+#include <stdio.h>
+ #include <limits.h>
+ #define INF 99999
+ #define MAX 100
+ int dist[MAX][MAX], pred[MAX][MAX];
+ int n;
+ // Function to print the path from i to j
+ void printPath(int i, int j) {
+    if (i == j) {
+        printf("%d", i);
+        return;
+    } else if (pred[i][j] == -1) {
+        printf("No path");
+        return;
+    } else {
+        printPath(i, pred[i][j]);
+        printf(" -> %d", j);
+    }
+ }
+ void floydWarshall() {
+    for (int k = 0; k < n; k++) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                    pred[i][j] = pred[k][j];
+                }
+            }
+        }
+    }
+ }
+ int main() {
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+    printf("Enter the cost adjacency matrix (0 if no edge, and 0 for self-loops):\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            int val;
+            scanf("%d", &val);
+            if (i != j && val == 0)
+                dist[i][j] = INF;
+            else
+                dist[i][j] = val;
+            if (i == j || val != 0)
+                pred[i][j] = i;
+            else
+                pred[i][j] = -1;
+        }
+    }
+ f
+ loydWarshall();
+    // Print Final Distance Matrix
+    printf("\nFinal Distance (D) Matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (dist[i][j] == INF)
+                printf("INF ");
+            else
+                printf("%3d ", dist[i][j]);
+        }
+        printf("\n");
+    }
+    // Print Predecessor Matrix
+    printf("\nPredecessor (Π) Matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (pred[i][j] == -1)
+                printf(" - ");
+            else
+                printf("%2d ", pred[i][j]);
+        }
+        printf("\n");
+    }
+    // Print Path Between Every Pair
+    printf("\nShortest Paths Between All Pairs:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("Path from %d to %d: ", i, j);
+            if (dist[i][j] == INF)
+                printf("No path\n");
+            else {
+                printPath(i, j);
+                printf(" (Cost = %d)\n", dist[i][j]);
+            }
+        }
+    }
+    return 0;
+ }
