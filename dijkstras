@@ -1,0 +1,88 @@
+#include <stdio.h>
+ #include <limits.h>
+ #define MAX 100
+ #define INF 9999
+ int D[MAX], Pi[MAX], visited[MAX];
+ int cost[MAX][MAX];
+ int n; // number of vertices
+ // Function to find the vertex with minimum distance
+ int findMinVertex() {
+    int min = INF, min_index = -1;
+    for (int i = 0; i < n; i++) {
+        if (!visited[i] && D[i] < min) {
+            min = D[i];
+            min_index = i;
+        }
+    }
+    return min_index;
+ }
+ // Dijkstra's Algorithm
+ void dijkstra(int src) {
+    for (int i = 0; i < n; i++) {
+        D[i] = INF;
+        Pi[i] = -1;
+        visited[i] = 0;
+    }
+    D[src] = 0;
+    for (int count = 0; count < n - 1; count++) {
+        int u = findMinVertex();
+        if (u == -1) break; // all remaining vertices are unreachable
+        visited[u] = 1;
+        for (int v = 0; v < n; v++) {
+            if (!visited[v] && cost[u][v] && D[u] + cost[u][v] < D[v]) {
+            }
+                D[v] = D[u] + cost[u][v];
+                Pi[v] = u;
+        }
+    }
+ }
+ // Function to print path from source to a vertex
+ void printPath(int vertex, int src) {
+    if (vertex == src) {
+        printf("%d", src);
+        return;
+    }
+    if (Pi[vertex] == -1) {
+        printf("No path");
+        return;
+    }
+    printPath(Pi[vertex], src);
+    printf(" -> %d", vertex);
+ }
+ int main() {
+    int src;
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+    printf("Enter cost adjacency matrix (0 if no edge):\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+            if (i != j && cost[i][j] == 0)
+                cost[i][j] = INF;
+        }
+    }
+    printf("Enter source vertex (0 to %d): ", n - 1);
+    scanf("%d", &src);
+    dijkstra(src);
+    // Print Distance and Predecessor vectors
+    printf("\nVertex\tD (Distance)\tPi (Predecessor)\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\t%d\t\t", i, D[i]);
+        if (Pi[i] == -1)
+            printf("NIL\n");
+        else
+            printf("%d\n", Pi[i]);
+    }
+    // Print paths from source to all vertices
+    printf("\nPaths from Source %d:\n", src);
+    for (int i = 0; i < n; i++) {
+        printf("Path to %d: ", i);
+        if (D[i] == INF)
+            printf("No path\n");
+        else {
+            printPath(i, src);
+            printf(" (Cost: %d)\n", D[i]);
+    }
+        }
+    return 0;
+ 
