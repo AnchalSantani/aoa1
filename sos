@@ -1,0 +1,38 @@
+#include <stdio.h>
+ int totalCalls = 0;
+ void sumOfSubsets(int set[], int subset[], int n, int subsetSize, int total, int index, int targetSum) {
+    totalCalls++;
+    if (total == targetSum) {
+        // Print the current subset
+        printf("Subset: ");
+        for (int i = 0; i < subsetSize; i++) {
+            printf("%d ", subset[i]);
+        }
+        printf("\n");
+        return;
+    }
+    if (index >= n || total > targetSum) {
+        return;
+    }
+    // Include the current element
+    subset[subsetSize] = set[index];
+    sumOfSubsets(set, subset, n, subsetSize + 1, total + set[index], index + 1, targetSum);
+    // Exclude the current element
+    sumOfSubsets(set, subset, n, subsetSize, total, index + 1, targetSum);
+ }
+ int main() {
+    int set[20], n, targetSum;
+    int subset[20];
+    printf("Enter number of elements in the set: ");
+    scanf("%d", &n);
+    printf("Enter elements of the set: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+    }
+    printf("Enter target sum: ");
+    scanf("%d", &targetSum);
+    printf("\nValid subsets:\n");
+    sumOfSubsets(set, subset, n, 0, 0, 0, targetSum);
+    printf("\nTotal number of recursive calls: %d\n", totalCalls);
+    return 0;
+ }
