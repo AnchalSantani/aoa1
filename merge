@@ -1,0 +1,66 @@
+#include <stdio.h>
+ int a[50], b[50];
+ int mergeSortCalls = 0; // Global counter
+ void merge(int low, int mid, int high)
+ {
+    int h = low, i = low, j = mid + 1, k;
+    while (h <= mid && j <= high)
+    {
+        if (a[h] <= a[j])
+        {
+            b[i++] = a[h++];
+        }
+        else
+        {
+            b[i++] = a[j++];
+        }
+    }
+    if (h > mid)
+    {
+        for (k = j; k <= high; k++)
+        {
+            b[i++] = a[k];
+        }
+    }
+    else
+    {
+        for (k = h; k <= mid; k++)
+        {
+            b[i++] = a[k];
+        }
+    }
+    for (k = low; k <= high; k++)
+    {
+        a[k] = b[k];
+    }
+ }
+ void merge_sort(int low, int high)
+ {
+    mergeSortCalls++; // Count each time merge_sort is called
+    if (low < high)
+    {
+        int mid = (low + high) / 2;
+        merge_sort(low, mid);
+        merge_sort(mid + 1, high);
+        merge(low, mid, high);
+    }
+ }
+ int main()
+ {
+    int s, i;
+    printf("Enter the size of the array: ");
+    scanf("%d", &s);
+    printf("Enter the array:\n");
+    for (i = 0; i < s; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    merge_sort(0, s - 1);
+    printf("\nArray after Merge Sort: ");
+    for (i = 0; i < s; i++)
+    {
+        printf("%d\t", a[i]);
+    }
+    printf("\n\nNumber of calls to merge_sort(): %d\n", mergeSortCalls);
+    return 0;
+ }
