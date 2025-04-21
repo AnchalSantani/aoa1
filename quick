@@ -1,0 +1,52 @@
+#include <stdio.h>
+ int count = 0; // Global counter for number of quick_sort calls
+ int divide(int a[], int p, int r)
+ {
+    int x, j, i, temp;
+    x = a[r];
+    i = p - 1;
+    for (j = p; j <= r - 1; j++)
+    {
+        if (a[j] <= x)
+        {
+            i++;
+            temp = a[i];
+            a[i] = a[j];
+            a[j] = temp;
+        }
+    }
+    temp = a[i + 1];
+    a[i + 1] = a[r];
+    a[r] = temp;
+    return i + 1;
+ }
+ void quick_sort(int a[], int p, int r)
+ {
+    count++; // Increment call counter
+    int q;
+    if (p < r)
+    {
+        q = divide(a, p, r);
+        quick_sort(a, p, q - 1);
+        quick_sort(a, q + 1, r);
+    }
+ }
+ int main()
+ {
+    int s, a[50], i;
+    printf("Enter the size of the array: ");
+    scanf("%d", &s);
+    printf("Enter the array elements:\n");
+    for (i = 0; i < s; i++)
+    {
+        scanf("%d", &a[i]);
+    }
+    quick_sort(a, 0, s - 1);
+    printf("\nArray after Quick Sort: ");
+    for (i = 0; i < s; i++)
+    {
+        printf("%d ", a[i]);
+    }
+    printf("\n\nNumber of calls to quick_sort(): %d\n", count);
+    return 0;
+ }
