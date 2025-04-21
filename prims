@@ -1,0 +1,43 @@
+#include <stdio.h>
+ #include <limits.h>
+ #define MAX 100
+ int main() {
+    int n;
+    int cost[MAX][MAX];
+    int visited[MAX] = {0};
+    int i, j, min, u, v;
+    int ne = 1;  // number of edges included in MST
+    int min_cost = 0;
+    printf("Enter the number of vertices: ");
+    scanf("%d", &n);
+    printf("Enter the cost adjacency matrix (0 for no edge):\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
+            if (cost[i][j] == 0)
+                cost[i][j] = INT_MAX; // treat 0 as no edge
+        }
+    }
+    visited[0] = 1; // Start from vertex 0
+    printf("\nEdges in the Minimum Spanning Tree:\n");
+    while (ne < n) {
+        min = INT_MAX;
+        for (i = 0; i < n; i++) {
+            if (visited[i]) {
+                for (j = 0; j < n; j++) {
+                    if (!visited[j] && cost[i][j] < min) {
+                        min = cost[i][j];
+                        u = i;
+                        v = j;
+                    }
+                }
+            }
+        }
+        printf("Edge %d: (%d -> %d) cost = %d\n", ne, u, v, min);
+        visited[v] = 1;
+        min_cost += min;
+        ne++;
+    }
+    printf("\nMinimum cost of the spanning tree = %d\n", min_cost);
+    return 0;
+ }
